@@ -1,0 +1,8 @@
+{
+    "git.ignoreLimitWarning": true,
+    "debug.node.autoAttach": "on",
+    "standard.enable": true,
+    "standard.run": "onType",
+    "standard.autoFixOnSave": true,
+    "standard.usePackageJson": true
+}
