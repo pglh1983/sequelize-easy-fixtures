@@ -1,5 +1,5 @@
 {
-  "name": "sequelize-fixture-mill",
+  "name": "sequelize-easy-fixtures",
   "version": "1.0.0",
   "description": "Quick & easy way of creating fixtures for Sequelize",
   "main": "index.js",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pglh1983/sequelize-fixture-mill.git"
+    "url": "git+https://github.com/pglh1983/sequelize-easy-fixtures.git"
   },
   "keywords": [
     "sequelize",
@@ -20,9 +20,9 @@
   "author": "Peter Hall <p.g.l.hall@gmail.com>",
   "license": "LGPL-2.1-only",
   "bugs": {
-    "url": "https://github.com/pglh1983/sequelize-fixture-mill/issues"
+    "url": "https://github.com/pglh1983/sequelize-easy-fixtures/issues"
   },
-  "homepage": "https://github.com/pglh1983/sequelize-fixture-mill#readme",
+  "homepage": "https://github.com/pglh1983/sequelize-easy-fixtures#readme",
   "devDependencies": {
     "mocha": "^5.2.0",
     "sequelize": "^4.42.0",
