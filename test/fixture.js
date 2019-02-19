@@ -61,7 +61,7 @@ describe('fixture', function describeFixture () {
     )
   })
 
-  it('creates associations from Sequelize promises', async function testSequelizeModel () {
+  it('creates associations from Sequelize promises', async function testSequelizePromises () {
     await User.create({ name: 'Amy', email: 'amy@example.com' })
     const keithPromise = User.create({ name: 'Keith', email: 'keith@example.com' })
     const postFixture = await fixture(Post, {
@@ -129,5 +129,40 @@ describe('fixture', function describeFixture () {
         id: 1, title: 'Comment title', body: 'Stupid comment', PostId: 1, UserId: 2, User: { id: 2, name: 'Keith', email: 'keith@example.com' }
       }]
     })
+  })
+
+  it('Finds records that already exist', async function testUpdateExisting () {
+    await User.create({ name: 'Amy', email: 'amy@example.com' })
+    const fixie = await fixture(User, {
+      where: { email: 'amy@example.com' },
+      defaults: { name: 'Amy' }
+    })
+    assert.deepEqual(
+      fixie.get({ plain: true }),
+      { id: 1, name: 'Amy', email: 'amy@example.com' }
+    )
+  })
+
+  it('Does not overwrite default values', async function testNoThwompDefaults () {
+    await User.create({ name: 'Amy', email: 'amy@example.com' })
+    const fixie = await fixture(User, {
+      where: { email: 'amy@example.com' },
+      defaults: { name: 'Steve' }
+    })
+    assert.deepEqual(
+      fixie.get({ plain: true }),
+      { id: 1, name: 'Amy', email: 'amy@example.com' }
+    )
+  })
+
+  it('Sets default values on new records', async function testCreateNewDefaults () {
+    const fixie = await fixture(User, {
+      where: { email: 'amy@example.com' },
+      defaults: { name: 'Amy' }
+    })
+    assert.deepEqual(
+      fixie.get({ plain: true }),
+      { id: 1, name: 'Amy', email: 'amy@example.com' }
+    )
   })
 })
