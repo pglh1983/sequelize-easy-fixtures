@@ -20,7 +20,7 @@ module.exports =
           type: Sequelize.TEXT,
           allowNull: false
         }
-      }, { sequelize })
+      }, { sequelize, timestamps: false })
     };
 
     static associate (models) {

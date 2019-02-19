@@ -12,23 +12,7 @@ module.exports =
   class User extends Sequelize.Model {
     static init (sequelize) {
       return super.init({
-        firstName: {
-          type: Sequelize.STRING,
-          allowNull: false
-        },
-        lastName: {
-          type: Sequelize.STRING,
-          allowNull: false
-        },
-        username: {
-          type: Sequelize.STRING,
-          allowNull: false
-        },
-        password_hash: {
-          type: Sequelize.STRING,
-          allowNull: false
-        },
-        salt: {
+        name: {
           type: Sequelize.STRING,
           allowNull: false
         },
@@ -38,11 +22,8 @@ module.exports =
           validate: {
             isEmail: true
           }
-        },
-        isActive: {
-          type: Sequelize.BOOLEAN
         }
-      }, { sequelize })
+      }, { sequelize, timestamps: false })
     };
 
     static associate (models) {
