@@ -1,5 +1,6 @@
 # Test files
-tmp
+testdb.sqlite3
+testdb.sqlite3-journal
 
 # Mac nonsense
 .DS_Store

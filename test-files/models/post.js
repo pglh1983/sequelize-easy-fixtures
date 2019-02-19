@@ -19,12 +19,8 @@ module.exports =
         body: {
           type: Sequelize.TEXT,
           allowNull: false
-        },
-        assets: {
-          type: Sequelize.JSON,
-          allowNull: true
         }
-      }, { sequelize })
+      }, { sequelize, timestamps: false })
     };
 
     static associate (models) {
