@@ -10,8 +10,7 @@ describe('fixture()', function describeFixture () {
     return connection.sync({ force: true })
   })
 
-  describe('{ where }', function describeWhereOption() {
-
+  describe('{ where }', function describeWhereOption () {
     it('creates a single fixture', async function testSingleFixture () {
       const result = await fixture(User, {
         name: 'Amy',
@@ -212,8 +211,23 @@ describe('fixture()', function describeFixture () {
         ]
       })
     })
+
+    it('tolerates nullable associations', async function testNullableAssoc () {
+      const result = await fixture(Post, {
+        title: 'Test post',
+        body: 'Test body',
+        User: null
+      })
+
+      assert.deepEqual(result.get({ plain: true }), {
+        id: 1,
+        title: 'Test post',
+        body: 'Test body',
+        UserId: null
+      })
+    })
   })
-  
+
   describe('{ default }', function describeDefaultOption () {
     it('Sets default values on new records', async function testCreateNewDefaults () {
       const fixie = await fixture(User, {
@@ -225,7 +239,7 @@ describe('fixture()', function describeFixture () {
         { id: 1, name: 'Amy', email: 'amy@example.com' }
       )
     })
-    
+
     it('Does not overwrite default values on records that exist already', async function testNoThwompDefaults () {
       await User.create({ name: 'Amy', email: 'amy@example.com' })
       const fixie = await fixture(User, {
@@ -238,7 +252,7 @@ describe('fixture()', function describeFixture () {
       )
     })
   })
-  
+
   describe('{ sets }', function describeSetOption () {
     it('Sets set values on existing records', async function testThwompExisting () {
       await User.create({ name: 'Amy', email: 'amy@example.com' })
@@ -259,7 +273,7 @@ describe('fixture()', function describeFixture () {
       )
     })
   })
-  
+
   it('Doesn\'t set values on created records', async function testSetCreated () {
     const fixie = await fixture(User, {
       where: { email: 'amy@example.com' },
