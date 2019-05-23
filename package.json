@@ -6,7 +6,8 @@
   "scripts": {
     "clean": "rm ./tmp/*",
     "db": "sqlite3 tmp/testdb.sqlite3",
-    "test": "mocha"
+    "test": "standard && mocha",
+    "test:debug": "mocha --inspect"
   },
   "repository": {
     "type": "git",

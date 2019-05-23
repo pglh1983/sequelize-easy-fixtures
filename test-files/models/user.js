@@ -14,13 +14,23 @@ module.exports =
       return super.init({
         name: {
           type: Sequelize.STRING,
-          allowNull: false
+          allowNull: false,
+          default: ''
         },
         email: {
           type: Sequelize.STRING,
           allowNull: false,
           validate: {
             isEmail: true
+          }
+        },
+        initial: {
+          type: Sequelize.VIRTUAL,
+          get () {
+            return this.name[0]
+          },
+          set (value) {
+            this.name = value + this.name.substring(1)
           }
         }
       }, { sequelize, timestamps: false })

@@ -19,7 +19,8 @@ describe('fixture()', function describeFixture () {
       assert.deepEqual(result.get({ plain: true }), {
         id: 1,
         name: 'Amy',
-        email: 'amy@example.com'
+        email: 'amy@example.com',
+        initial: 'A'
       })
     })
 
@@ -50,7 +51,8 @@ describe('fixture()', function describeFixture () {
       assert.deepEqual(result.get({ plain: true }), {
         id: 1,
         name: 'Amy',
-        email: 'amy@example.com'
+        email: 'amy@example.com',
+        initial: 'A'
       })
       const articles = await Post.findAll({ where: { UserId: 1 } })
       assert.deepEqual(
@@ -90,9 +92,16 @@ describe('fixture()', function describeFixture () {
         title: 'Post title',
         body: 'Insightful post',
         UserId: 1,
-        User: { id: 1, name: 'Amy', email: 'amy@example.com' },
+        User: { id: 1, name: 'Amy', email: 'amy@example.com', initial: 'A' },
         Comments: [{
-          id: 1, title: 'Comment title', body: 'Stupid comment', PostId: 1, UserId: 2, User: { id: 2, name: 'Keith', email: 'keith@example.com' }
+          id: 1,
+          title: 'Comment title',
+          body: 'Stupid comment',
+          PostId: 1,
+          UserId: 2,
+          User: {
+            id: 2, name: 'Keith', email: 'keith@example.com', initial: 'K'
+          }
         }]
       })
     })
@@ -125,9 +134,16 @@ describe('fixture()', function describeFixture () {
         title: 'Post title',
         body: 'Insightful post',
         UserId: 1,
-        User: { id: 1, name: 'Amy', email: 'amy@example.com' },
+        User: { id: 1, name: 'Amy', email: 'amy@example.com', initial: 'A' },
         Comments: [{
-          id: 1, title: 'Comment title', body: 'Stupid comment', PostId: 1, UserId: 2, User: { id: 2, name: 'Keith', email: 'keith@example.com' }
+          id: 1,
+          title: 'Comment title',
+          body: 'Stupid comment',
+          PostId: 1,
+          UserId: 2,
+          User: {
+            id: 2, name: 'Keith', email: 'keith@example.com', initial: 'K'
+          }
         }]
       })
     })
@@ -140,7 +156,7 @@ describe('fixture()', function describeFixture () {
       })
       assert.deepEqual(
         fixie.get({ plain: true }),
-        { id: 1, name: 'Amy', email: 'amy@example.com' }
+        { id: 1, name: 'Amy', email: 'amy@example.com', initial: 'A' }
       )
     })
 
@@ -174,7 +190,7 @@ describe('fixture()', function describeFixture () {
         title: 'Post title',
         body: 'Insightful post',
         UserId: 1,
-        User: { id: 1, name: 'Amy', email: 'amy@example.com' },
+        User: { id: 1, name: 'Amy', email: 'amy@example.com', initial: 'A' },
         Comments: [
           { id: 1,
             PostId: 1,
@@ -182,7 +198,7 @@ describe('fixture()', function describeFixture () {
             body: 'Thoughtful comment',
             UserId: 1,
             User: {
-              id: 1, name: 'Amy', email: 'amy@example.com'
+              id: 1, name: 'Amy', email: 'amy@example.com', initial: 'A'
             } },
           { id: 2,
             PostId: 1,
@@ -190,7 +206,7 @@ describe('fixture()', function describeFixture () {
             body: 'Sophisticated comment',
             UserId: 1,
             User: {
-              id: 1, name: 'Amy', email: 'amy@example.com'
+              id: 1, name: 'Amy', email: 'amy@example.com', initial: 'A'
             } },
           { id: 3,
             PostId: 1,
@@ -198,7 +214,7 @@ describe('fixture()', function describeFixture () {
             body: 'Ridiculous comment',
             UserId: 2,
             User: {
-              id: 2, name: 'Keith', email: 'keith@example.com'
+              id: 2, name: 'Keith', email: 'keith@example.com', initial: 'K'
             } },
           { id: 4,
             PostId: 1,
@@ -206,7 +222,7 @@ describe('fixture()', function describeFixture () {
             body: 'Amazing comment',
             UserId: 1,
             User: {
-              id: 1, name: 'Amy', email: 'amy@example.com'
+              id: 1, name: 'Amy', email: 'amy@example.com', initial: 'A'
             } }
         ]
       })
@@ -226,6 +242,32 @@ describe('fixture()', function describeFixture () {
         UserId: null
       })
     })
+
+    it('ignores virtual fields for existing records', async function testIgnoreVirtual () {
+      await User.create({ name: 'Amy', email: 'amy@example.com' })
+      const fixie = await fixture(User, {
+        where: { email: 'amy@example.com', initial: 'Q' },
+        defaults: { name: 'Amy' }
+      })
+      assert.deepEqual(
+        fixie.get({ plain: true }),
+        { id: 1, name: 'Amy', email: 'amy@example.com', initial: 'A' }
+      )
+    })
+
+    it('pays attention to virtual fields for new records', async function testSetVirtual () {
+      const result = await fixture(User, {
+        name: 'Amy',
+        email: 'amy@example.com',
+        initial: 'R'
+      })
+      assert.deepEqual(result.get({ plain: true }), {
+        id: 1,
+        name: 'Rmy',
+        email: 'amy@example.com',
+        initial: 'R'
+      })
+    })
   })
 
   describe('{ default }', function describeDefaultOption () {
@@ -236,7 +278,7 @@ describe('fixture()', function describeFixture () {
       })
       assert.deepEqual(
         fixie.get({ plain: true }),
-        { id: 1, name: 'Amy', email: 'amy@example.com' }
+        { id: 1, name: 'Amy', email: 'amy@example.com', initial: 'A' }
       )
     })
 
@@ -248,7 +290,7 @@ describe('fixture()', function describeFixture () {
       })
       assert.deepEqual(
         fixie.get({ plain: true }),
-        { id: 1, name: 'Amy', email: 'amy@example.com' }
+        { id: 1, name: 'Amy', email: 'amy@example.com', initial: 'A' }
       )
     })
   })
@@ -263,13 +305,13 @@ describe('fixture()', function describeFixture () {
       // Set the values in the return obj
       assert.deepEqual(
         fixie.get({ plain: true }),
-        { id: 1, name: 'Aimee', email: 'amy@example.com' }
+        { id: 1, name: 'Aimee', email: 'amy@example.com', initial: 'A' }
       )
       // Set the values in the DB
       const user = await User.findOne({ where: { email: 'amy@example.com' } })
       assert.deepEqual(
         user.get({ plain: true }),
-        { id: 1, name: 'Aimee', email: 'amy@example.com' }
+        { id: 1, name: 'Aimee', email: 'amy@example.com', initial: 'A' }
       )
     })
   })
@@ -283,13 +325,13 @@ describe('fixture()', function describeFixture () {
     // Set the values in the return obj
     assert.deepEqual(
       fixie.get({ plain: true }),
-      { id: 1, name: 'Amy', email: 'amy@example.com' }
+      { id: 1, name: 'Amy', email: 'amy@example.com', initial: 'A' }
     )
     // Set the values in the DB
     const user = await User.findOne({ where: { email: 'amy@example.com' } })
     assert.deepEqual(
       user.get({ plain: true }),
-      { id: 1, name: 'Amy', email: 'amy@example.com' }
+      { id: 1, name: 'Amy', email: 'amy@example.com', initial: 'A' }
     )
   })
 })
