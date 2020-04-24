@@ -52,7 +52,9 @@ const postFixture = await fixture(Post, {
 As you can see above, you can supply `hasMany` or
 `belongsTo` associations inline, and the library
 will figure out what order it needs to insert the
-model records in.
+model records in. Other libraries I have found will
+complain if you don't have the hiererchy structure
+in the "correct" form for the query order.
 
 As well as supplying associations as regular old
 Javascript objects, you can also supply existing
@@ -84,6 +86,6 @@ const postFixture = await fixture(Post, {
 
 ## Feedback
 
-If you have any feedback about this repo or would 
+If you have any feedback about this repo or would
 like to see it actually developed, please get in
 touch with my via Github.
