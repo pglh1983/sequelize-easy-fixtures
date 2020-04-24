@@ -28,8 +28,22 @@ amounts of structured data to your Sequelize-fronted
 relational database as quickly as possible, using a
 hierarchical syntax, like so:
 
+_setup.js:_
+
 ```javascript
-const postFixture = await fixture(Post, {
+// Builds a factory for each of your models
+const buildFixtureFactories = require('sequelize-easy-fixtures')
+const models = require('./models/index.js') // You are presumed to have the usual Sequelize models/index.js
+module.exports = buildFactories(models)
+```
+
+_your-file.js:_
+
+```javascript
+// Require the factories you just build
+const { Post, User, Comment } = require('./setup.js')
+
+const postFixture = await Post({
     title: 'Post title',
     body: 'Insightful post',
     User: {
@@ -61,19 +75,21 @@ Javascript objects, you can also supply existing
 Sequelize model records, or Promises that resolve
 to them:
 
+_your-file.js:_
+
 ```javascript
-const amy = fixture(User, {
+const amy = await User({
   name: 'Amy',
   email: 'amy@exmple.org'
 })
-const keith = fixture(User, {
+const keith = User({
   name: 'Keith',
   email: 'keith@exmple.org'
 })
 const postFixture = await fixture(Post, {
     title: 'Post title',
     body: 'Insightful post',
-    User: await amy, // Existing record
+    User: amy, // Existing record
     Comments: [
       {
         title: 'Comment title',
